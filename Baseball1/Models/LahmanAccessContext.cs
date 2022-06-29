@@ -154,6 +154,8 @@ namespace Baseball1.Models
                 entity.Property(e => e.LgId)
                     .HasMaxLength(2)
                     .HasColumnName("lgID");
+
+                entity.HasOne(e => e.Person).WithMany(v => v.AppearanceSeasons);
             });
 
             modelBuilder.Entity<AwardsManager>(entity =>
@@ -839,7 +841,8 @@ namespace Baseball1.Models
                 entity.HasMany(v => v.BattingPostSeasons).WithOne(v => v.Person);
 
                 entity.HasMany(v => v.PitchingSeasons).WithOne(v => v.Person);
-                //entity.HasMany(v => v.PeopleSeasons).WithOne(v => v.Person);
+
+                entity.HasMany(v => v.AppearanceSeasons).WithOne(v => v.Person);
 
             });
 
@@ -909,6 +912,8 @@ namespace Baseball1.Models
                     .HasColumnName("teamID");
 
                 entity.Property(e => e.Wp).HasColumnName("WP");
+                entity.HasOne(e => e.Person).WithMany(v => v.PitchingSeasons);
+
             });
 
             modelBuilder.Entity<PitchingPost>(entity =>

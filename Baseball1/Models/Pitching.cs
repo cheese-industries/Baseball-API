@@ -40,6 +40,8 @@ namespace Baseball1.Models
         [ForeignKey("PlayerId")]
         public Person Person { get; set; }
 
+        [ForeignKey("YearId, LgId, TeamId")]
+        public Team Team { get; set; }
 
 
     }

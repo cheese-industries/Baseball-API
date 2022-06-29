@@ -60,10 +60,12 @@ namespace Baseball1.Models
         //[ForeignKey("TeamId")]
         //public Batting Batting { get; set; }
 
-        [ForeignKey("PlayerId")]
-        public Person Person { get; set; }
+        //[ForeignKey("PlayerId")]
+        //public Person Person { get; set; }
 
         public ICollection<Batting> BattingSeasons { get; set; }
-
+        public ICollection<Pitching> PitchingSeasons { get; set; }
+        public ICollection<Fielding> FieldingSeasons { get; set; }
+        public ICollection<Appearance> AppearanceSeasons { get; set; }
     }
 }

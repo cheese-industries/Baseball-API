@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Baseball1.Models
 {
@@ -24,5 +25,10 @@ namespace Baseball1.Models
         public short? Cs { get; set; }
         public double? Zr { get; set; }
         public byte[] SsmaTimeStamp { get; set; } = null!;
+        [ForeignKey("PlayerId")]
+        public Person Person { get; set; }
+
+        [ForeignKey("YearId, LgId, TeamId")]
+        public Team Team { get; set; }
     }
 }

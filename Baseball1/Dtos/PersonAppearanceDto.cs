@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Baseball1.Models
+﻿namespace Baseball1.Dtos
 {
-    public partial class Appearance
+    public class PersonAppearanceDto
+    {
+        public List<AppearanceDto> AppearanceLines { get; set; }
+    }
+
+    public class AppearanceDto
     {
         public short YearId { get; set; }
         public string TeamId { get; set; } = null!;
@@ -27,10 +28,5 @@ namespace Baseball1.Models
         public short? GDh { get; set; }
         public short? GPh { get; set; }
         public short? GPr { get; set; }
-        [ForeignKey("PlayerId")]
-        public Person Person { get; set; }
-
-        [ForeignKey("YearId, LgId, TeamId")]
-        public Team Team { get; set; }
     }
 }

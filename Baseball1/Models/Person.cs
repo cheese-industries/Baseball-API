@@ -34,5 +34,6 @@ namespace Baseball1.Models
         public ICollection<BattingPost> BattingPostSeasons { get; set; }
         public ICollection<Pitching> PitchingSeasons { get; set; }
         public ICollection<Fielding> FieldingSeasons { get; set; }
+        public ICollection<Appearance> AppearanceSeasons { get; set; }
     }
 }
