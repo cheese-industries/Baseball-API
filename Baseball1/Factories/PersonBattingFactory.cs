@@ -1,4 +1,6 @@
-﻿namespace Baseball1.Factories
+﻿using System.Linq;
+
+namespace Baseball1.Factories
 {
     public static class PersonBattingFactory
     {
@@ -6,6 +8,7 @@
         public static Dtos.PersonBattingDto ToDto(Person person)
         {
             var BatLineShortcut = person.BattingSeasons.Select(b => GetBattingLine(b));
+            
 
             //var BirthMonth = person.BirthMonth switch { 
             //    1 => "January", 
@@ -117,7 +120,7 @@
                 CareerBA = (float)CareerBA,
                 CareerOBP = (float)CareerOBP,
                 CareerSLG = (float)CareerSLG,
-
+                TeamSummaries = CreateTeamSummary(BatLineShortcut.ToList()),
             };
         }
         private static Dtos.BattingDto GetBattingLine(Batting batting)
@@ -206,6 +209,42 @@
                 SLG = Math.Round((float)(batting.H + batting._2b + (2 * batting._3b) + (3 * batting.Hr)) / (batting.Ab), 3)
 
             };
+        }
+        private static List<Dtos.TeamBattingSummaryDto> CreateTeamSummary(List<Dtos.BattingDto> battingLines)
+        {
+            var TeamSummaries = new List<Dtos.TeamBattingSummaryDto>();
+            // Get unique values for batting.TeamId
+            var UniqueTeams = battingLines.Select(t => t.TeamId).Distinct();
+            // Create list for each unique value
+            // for each line, assign to correct list
+            foreach (var team in UniqueTeams)
+            {
+                //Take batting lines where teamId == team
+                var teamBattingLines = battingLines.Where(t => t.TeamId == team);
+                var teamSummary = new Dtos.TeamBattingSummaryDto
+              {
+                    TeamId = team,
+                    G = (short)teamBattingLines.Sum(t => t.G),
+                    Ab = (short)teamBattingLines.Sum(t => t.Ab),
+                    R = (short)teamBattingLines.Sum(t => t.R),
+                    H = (short)teamBattingLines.Sum(t => t.H),
+                    _2b = (short)teamBattingLines.Sum(t => t._2b),
+                    _3b = (short)teamBattingLines.Sum(t => t._3b),
+                    Hr = (short)teamBattingLines.Sum(t => t.Hr),
+                    Rbi = (short)teamBattingLines.Sum(t => t.Rbi),
+                    Sb = (short)teamBattingLines.Sum(t => t.Sb),
+                    Cs = (short)teamBattingLines.Sum(t => t.Cs),
+                    Bb = (short)teamBattingLines.Sum(t => t.Bb),
+                    So = (short)teamBattingLines.Sum(t => t.So),
+                    Ibb = (short)teamBattingLines.Sum(t => t.Ibb),
+                    Hbp = (short)teamBattingLines.Sum(t => t.Hbp),
+                    Sh = (short)teamBattingLines.Sum(t => t.Sh),
+                    Sf = (short)teamBattingLines.Sum(t => t.Sf),
+                    Gidp = (short)teamBattingLines.Sum(t => t.Gidp),
+                };
+                TeamSummaries.Add(teamSummary);
+            }
+                return TeamSummaries;
         }
     }
 }

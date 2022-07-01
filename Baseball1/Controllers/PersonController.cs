@@ -51,13 +51,13 @@ namespace Baseball1.Controllers
             return Ok(person);
         }
 
-        [HttpGet("BattingByTeam/{TeamId}")]
+        [HttpGet("BattingByTeam/{TeamId}/{YearId}")]
         public async Task<ActionResult<List<Team>>> GetPersonsByTeamId(string TeamId, int YearId)
         {
             //var person = await _context.People.Include(p => p.BattingSeasons).Where(p => p.BattingSeasons.TeamId == TeamId).ToListAsync();
             var team = await _context.Teams
                 .Include(t => t.BattingSeasons)
-                //.ThenInclude(b => b.Person.NameLast)
+                .ThenInclude(b => b.Person)
                 .Where(t => t.TeamId == TeamId && t.YearId == YearId)
                 .ToListAsync();
             if (team == null)
@@ -83,13 +83,13 @@ namespace Baseball1.Controllers
             return Ok(Factories.PersonPitchingFactory.ToDto(person));
         }
 
-        [HttpGet("PitchingByTeam/{TeamId}")]
+        [HttpGet("PitchingByTeam/{TeamId}/{YearId}")]
         public async Task<ActionResult<List<Team>>> GetPitchersByTeamId(string TeamId, int YearId)
         {
             //var person = await _context.People.Include(p => p.BattingSeasons).Where(p => p.BattingSeasons.TeamId == TeamId).ToListAsync();
             var team = await _context.Teams
                 .Include(t => t.PitchingSeasons)
-                //.ThenInclude(b => b.Person.NameLast)
+                .ThenInclude(b => b.Person)
                 .Where(t => t.TeamId == TeamId && t.YearId == YearId)
                 .ToListAsync();
             if (team == null)
@@ -103,16 +103,16 @@ namespace Baseball1.Controllers
             var person = await _context.People.Include(f => f.FieldingSeasons).SingleOrDefaultAsync(f => f.BbrefId == BbrefId);
             if (person == null)
                 return BadRequest("Player not found");
-            return Ok(person);
+            return Ok(Factories.PersonFieldingFactory.ToDto(person));
         }
 
-        [HttpGet("FieldingByTeam/{TeamId}")]
+        [HttpGet("FieldingByTeam/{TeamId}/{YearId}")]
         public async Task<ActionResult<List<Team>>> GetFieldersByTeamId(string TeamId, int YearId)
         {
             //var person = await _context.People.Include(p => p.BattingSeasons).Where(p => p.BattingSeasons.TeamId == TeamId).ToListAsync();
             var team = await _context.Teams
                 .Include(t => t.FieldingSeasons)
-                //.ThenInclude(b => b.Person.NameLast)
+                .ThenInclude(b => b.Person)
                 .Where(t => t.TeamId == TeamId && t.YearId == YearId)
                 .ToListAsync();
             if (team == null)
@@ -129,13 +129,13 @@ namespace Baseball1.Controllers
             return Ok(Factories.PersonAppearanceFactory.ToDto(person));
         }
 
-        [HttpGet("AppearancesByTeam/{TeamId}")]
+        [HttpGet("AppearancesByTeam/{TeamId}/{YearId}")]
         public async Task<ActionResult<List<Team>>> GetAppearancesByTeamId(string TeamId, int YearId)
         {
             //var person = await _context.People.Include(p => p.BattingSeasons).Where(p => p.BattingSeasons.TeamId == TeamId).ToListAsync();
             var team = await _context.Teams
                 .Include(t => t.AppearanceSeasons)
-                //.ThenInclude(b => b.Person.NameLast)
+                .ThenInclude(b => b.Person)
                 .Where(t => t.TeamId == TeamId && t.YearId == YearId)
                 .ToListAsync();
             if (team == null)

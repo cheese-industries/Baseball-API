@@ -1,4 +1,6 @@
-﻿namespace Baseball1.Factories
+﻿using System.Linq;
+
+namespace Baseball1.Factories
 {
     public class PersonPitchingFactory
     {
@@ -22,7 +24,7 @@
             var CareerSH = person.PitchingSeasons.Select(p => GetPitchingLine(p)).Sum(p => p.Sh);
             var CareerSF = person.PitchingSeasons.Select(p => GetPitchingLine(p)).Sum(p => p.Sf);
             var CareerH = person.PitchingSeasons.Select(p => GetPitchingLine(p)).Sum(p => p.H);
-            var CareerOppAB = CareerBFP - CareerBB - CareerHBP - CareerSH - CareerSF;
+            var CareerOppAB = CareerBFP - (CareerBB ?? 0) - (CareerHBP ?? 0) - (CareerSH ?? 0) - (CareerSF ?? 0);
             var CareerOppBA = 0.000;
 
             if (CareerOppAB > 0)
@@ -43,7 +45,7 @@
                 CareerSO9 = (double)((double)person.PitchingSeasons.Select(p => GetPitchingLine(p)).Sum(p => p.So) * 27
                      / (double)person.PitchingSeasons.Select(p => GetPitchingLine(p)).Sum(p => p.Ipouts));
             }
-
+            
             if (CareerW + CareerL > 0)
             {
                 CareerWPct = (double)((double)CareerW / (double)(CareerW + CareerL));
@@ -53,7 +55,8 @@
             {
                 Name = $"{person.NameFirst} {person.NameLast}",
                 PitchingLines = person.PitchingSeasons.Select(b => GetPitchingLine(b)).ToList(),
-                TotalW = CareerW,
+                TeamSummaries = CreateTeamSummary(person.PitchingSeasons.Select(p => GetPitchingLine(p)).ToList()),
+            TotalW = CareerW,
                 TotalL = CareerL,
                 TotalG = person.PitchingSeasons.Select(p => GetPitchingLine(p)).Sum(p => p.G),
                 TotalGs = person.PitchingSeasons.Select(p => GetPitchingLine(p)).Sum(p => p.Gs),
@@ -155,6 +158,95 @@
                 bb9 = Math.Round(BB9,1),
                 so9 = Math.Round(SO9,1),
             };
+        }
+
+        private static List<Dtos.TeamPitchingSummaryDto> CreateTeamSummary(List<Dtos.PitchingDto> pitchingLines)
+        {
+            var TeamSummaries = new List<Dtos.TeamPitchingSummaryDto>();
+            var UniqueTeams = pitchingLines.Select(t => t.TeamId).Distinct();
+            foreach (var team in UniqueTeams)
+            {
+                var TeamERA = 0.00;
+                var TeamH9 = 0.0;
+                var TeamHR9 = 0.0;
+                var TeamBB9 = 0.0;
+                var TeamSO9 = 0.0;
+                var teamPitchingLines = pitchingLines.Where(t => t.TeamId == team);
+                var TeamH = teamPitchingLines.Sum(t => t.H);
+                var TeamEr = teamPitchingLines.Sum(t => t.Er);
+                var TeamHr = teamPitchingLines.Sum(t => t.Hr);
+                var TeamBb = teamPitchingLines.Sum(t => t.Bb);
+                var TeamSo = teamPitchingLines.Sum(t => t.So);
+                var Ipouts = teamPitchingLines.Sum(t => t.Ipouts);
+                var TeamHbp = teamPitchingLines.Sum(t => t.Hbp);
+                var TeamBfp = teamPitchingLines.Sum(t => t.Bfp);
+                var TeamSh = teamPitchingLines.Sum(t => t.Sh);
+                var TeamSf = teamPitchingLines.Sum(t => t.Sf);
+          
+                var TeamOppAB = TeamBfp - (TeamBb ?? 0) - (TeamHbp ?? 0) - (TeamSh ?? 0) - (TeamSf ?? 0);
+                var TeamOppBA = (decimal)0.000;
+
+                if (TeamOppAB > 0)
+                {
+                    TeamOppBA = (decimal)TeamH / (decimal)TeamOppAB;
+                }
+
+                if (Ipouts > 0)
+                {
+                    TeamERA = (double)TeamEr * 27 / (double)Ipouts;
+                    TeamH9 = (double)TeamH * 27 / (double)Ipouts;
+                    TeamBB9 = (double)TeamBb * 27 / (double)Ipouts;
+                    TeamHR9 = (double)TeamHr * 27 / (double)Ipouts;
+                    TeamSO9 = (double)TeamSo * 27 / (double)Ipouts;
+                }
+                var TeamPartialInnings = (Ipouts % 3);
+                var TeamFullInnings = (Ipouts - TeamPartialInnings) / 3;
+                var TeamIP = $"{TeamFullInnings.ToString()}.{TeamPartialInnings.ToString()}";
+                var TeamW = (short)teamPitchingLines.Sum(t => t.W);
+                var TeamL = (short)teamPitchingLines.Sum(t => t.L);
+                var TeamWPct = 0.000;
+                if (TeamW + TeamL > 0)
+                {
+                    TeamWPct = (double)((double)TeamW / (double)(TeamW + TeamL));
+                }
+                var teamSummary = new Dtos.TeamPitchingSummaryDto
+                {
+                    TeamId = team,
+                    W = (short)teamPitchingLines.Sum(t => t.W),
+                    L = (short)teamPitchingLines.Sum(t => t.L),
+                    G = (short)teamPitchingLines.Sum(t => t.G),
+                    Gs = (short)teamPitchingLines.Sum(t => t.Gs),
+                    Cg = (short)teamPitchingLines.Sum(t => t.Cg),
+                    Sho = (short)teamPitchingLines.Sum(t => t.Sho),
+                    Sv = (short)teamPitchingLines.Sum(t => t.Sv),
+                    //Ipouts = (short)teamPitchingLines.Sum(t => t.Ipouts),
+                    WPct = Math.Round(TeamWPct,3),
+                    era = Math.Round(TeamERA,2),
+                    h9 = Math.Round(TeamH9,1),
+                    hr9 = Math.Round(TeamHR9, 1),
+                    bb9 = Math.Round(TeamBB9, 1),
+                    so9 = Math.Round(TeamSO9, 1),
+                    Oppba = (decimal)Math.Round(TeamOppBA,3),
+                    Ip = TeamIP,
+                    H = (short)teamPitchingLines.Sum(t => t.H),
+                    Er = (short)teamPitchingLines.Sum(t => t.Er),
+                    Hr = (short)teamPitchingLines.Sum(t => t.Hr),
+                    Bb = (short)teamPitchingLines.Sum(t => t.Bb),
+                    So = (short)teamPitchingLines.Sum(t => t.So),
+                    Ibb = (short)teamPitchingLines.Sum(t => t.Ibb),
+                    Wp = (short)teamPitchingLines.Sum(t => t.Wp),
+                    Hbp = (short)teamPitchingLines.Sum(t => t.Hbp),
+                    Bk = (short)teamPitchingLines.Sum(t => t.Bk),
+                    Bfp = (short)teamPitchingLines.Sum(t => t.Bfp),
+                    Gf = (short)teamPitchingLines.Sum(t => t.Gf),
+                    R = (short)teamPitchingLines.Sum(t => t.R),
+                    Sf = (short)teamPitchingLines.Sum(t => t.Sf),
+                    Sh = (short)teamPitchingLines.Sum(t => t.Sh),
+                    Gidp = (short)teamPitchingLines.Sum(t => t.Gidp),
+                };
+                TeamSummaries.Add(teamSummary);
+            }
+                return TeamSummaries;
         }
     }
 }

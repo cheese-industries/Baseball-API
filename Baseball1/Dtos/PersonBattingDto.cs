@@ -40,6 +40,7 @@
 
 
         public List<BattingDto> BattingLines { get; set; }
+        public List<TeamBattingSummaryDto> TeamSummaries { get; set; }
     }
     public class BattingDto
     {

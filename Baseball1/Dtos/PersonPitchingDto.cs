@@ -35,6 +35,7 @@
         public double TotalWPct { get; set; }
         public double TotalOppBA { get; set; }
         public List<PitchingDto> PitchingLines { get; set; }
+        public List<TeamPitchingSummaryDto> TeamSummaries { get; set; }
 
     }
 
