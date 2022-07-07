@@ -221,6 +221,29 @@ namespace Baseball1.Factories
             {
                 //Take batting lines where teamId == team
                 var teamBattingLines = battingLines.Where(t => t.TeamId == team);
+                var TeamBa = .000;
+                var TeamObp = .000;
+                var TeamSlg = .000;
+                var TeamAb = teamBattingLines.Sum(t => t.Ab);
+                var TeamH = teamBattingLines.Sum(t => t.H);
+                var TeamBb = teamBattingLines.Sum(t => t.Bb);
+                var TeamHbp = teamBattingLines.Sum(t => t.Hbp);
+                var TeamSf = teamBattingLines.Sum(t => t.Sf);
+                var Team2b = teamBattingLines.Sum(t => t._2b);
+                var Team3b = teamBattingLines.Sum(t => t._3b);
+                var TeamHr = teamBattingLines.Sum(t => t.Hr);
+                var TeamTb = TeamH + Team2b + 2*Team3b + 3*TeamHr;
+                var TeamPa = TeamAb + TeamBb + TeamHbp + TeamSf;
+                if (TeamAb != null && TeamAb !=0)
+                {
+                    TeamBa = Math.Round((float)(TeamH) / (float)(TeamAb), 3);
+                    TeamSlg = Math.Round((float)(TeamTb) / (float)(TeamAb), 3);
+                }
+                if (TeamPa != null && TeamPa !=0)
+                {
+                    TeamObp = Math.Round(((float)(TeamH) + (float)(TeamHbp) + (float)(TeamBb)) / (float)(TeamPa), 3);
+                }
+
                 var teamSummary = new Dtos.TeamBattingSummaryDto
               {
                     TeamId = team,
@@ -241,6 +264,9 @@ namespace Baseball1.Factories
                     Sh = (short)teamBattingLines.Sum(t => t.Sh),
                     Sf = (short)teamBattingLines.Sum(t => t.Sf),
                     Gidp = (short)teamBattingLines.Sum(t => t.Gidp),
+                    BA = TeamBa,
+                    OBP = TeamObp,
+                    SLG = TeamSlg,
                 };
                 TeamSummaries.Add(teamSummary);
             }

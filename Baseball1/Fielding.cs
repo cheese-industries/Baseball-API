@@ -15,7 +15,7 @@ namespace Baseball1.Models
         public short? G { get; set; }
         public short? Gs { get; set; }
         public short? InnOuts { get; set; }
-        public short? Po { get; set; } 
+        public short? Po { get; set; }
         public short? A { get; set; }
         public short? E { get; set; }
         public short? Dp { get; set; }

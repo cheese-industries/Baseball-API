@@ -33,10 +33,10 @@ namespace Baseball1.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{BbrefId}")]
-        public async Task<ActionResult<Person>> GetPersonById(string BbrefId)
+        [HttpGet("{PlayerId}")]
+        public async Task<ActionResult<Person>> GetPersonById(string PlayerId)
         {
-            var person = await _context.People.SingleOrDefaultAsync(p => p.BbrefId == BbrefId);
+            var person = await _context.People.SingleOrDefaultAsync(p => p.PlayerId == PlayerId);
             if (person == null)
                 return BadRequest("Player not found");
             return Ok(person);
@@ -74,10 +74,10 @@ namespace Baseball1.Controllers
             return Ok(Factories.PersonBattingFactory.ToDto(person));
         }
 
-        [HttpGet("PitchingById/{BbrefId}")]
-        public async Task<ActionResult<Person>> GetPitchingById(string BbrefId)
+        [HttpGet("PitchingById/{PlayerId}")]
+        public async Task<ActionResult<Person>> GetPitchingById(string PlayerId)
         {
-            var person = await _context.People.Include(p => p.PitchingSeasons).SingleOrDefaultAsync(p => p.BbrefId == BbrefId);
+            var person = await _context.People.Include(p => p.PitchingSeasons).SingleOrDefaultAsync(p => p.PlayerId == PlayerId);
             if (person == null)
                 return BadRequest("Player not found");
             return Ok(Factories.PersonPitchingFactory.ToDto(person));
@@ -97,10 +97,10 @@ namespace Baseball1.Controllers
             return Ok(team);
         }
 
-        [HttpGet("FieldingById/{BbrefId}")]
-        public async Task<ActionResult<Person>> GetFieldingById(string BbrefId)
+        [HttpGet("FieldingById/{PlayerId}")]
+        public async Task<ActionResult<Person>> GetFieldingById(string PlayerId)
         {
-            var person = await _context.People.Include(f => f.FieldingSeasons).SingleOrDefaultAsync(f => f.BbrefId == BbrefId);
+            var person = await _context.People.Include(f => f.FieldingSeasons).SingleOrDefaultAsync(f => f.PlayerId == PlayerId);
             if (person == null)
                 return BadRequest("Player not found");
             return Ok(Factories.PersonFieldingFactory.ToDto(person));
