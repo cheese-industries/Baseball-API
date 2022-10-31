@@ -8,14 +8,14 @@ namespace Baseball1.Models
     {
         public string PlayerId { get; set; } = null!;
         public short YearId { get; set; }
-        public short Stint { get; set; }
+        public byte Stint { get; set; }
         public string? TeamId { get; set; }
         public string? LgId { get; set; }
         public string Pos { get; set; } = null!;
         public short? G { get; set; }
         public short? Gs { get; set; }
-        public short? InnOuts { get; set; }
-        public short? Po { get; set; } 
+        public int? InnOuts { get; set; }
+        public int? Po { get; set; }
         public short? A { get; set; }
         public short? E { get; set; }
         public short? Dp { get; set; }
@@ -23,8 +23,8 @@ namespace Baseball1.Models
         public short? Wp { get; set; }
         public short? Sb { get; set; }
         public short? Cs { get; set; }
-        public double? Zr { get; set; }
-        public byte[] SsmaTimeStamp { get; set; } = null!;
+        public string? Zr { get; set; }
+
         [ForeignKey("PlayerId")]
         public Person Person { get; set; }
 

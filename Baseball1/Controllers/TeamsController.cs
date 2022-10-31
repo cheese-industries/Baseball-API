@@ -16,8 +16,8 @@ namespace Baseball1.Controllers
         [HttpGet("season")]
         public async Task<ActionResult<List<Team>>> GetTeams(int yearID)
         {
-            //var teams = await _context.Teams.Include(t => t.TeamSeasons).SingleOrDefaultAsync(p => p.YearId == yearId);
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.Where(p => p.YearId == yearID).ToListAsync();
+            //var teams = await _context.Teams.ToListAsync();
             if (teams == null)
                 return NotFound();
             return Ok(teams);

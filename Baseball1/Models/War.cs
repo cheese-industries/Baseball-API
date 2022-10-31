@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Baseball1.Models
+namespace Baseball1
 {
     public partial class War
     {
-        public string Name { get; set; }
-        public string bbrefId { get; set; }
-        public int yearId { get; set; }
-        public string teamId { get; set; }
-        public int stintId { get; set; }
-        public string lgId { get; set; }
-        public float batWAA { get; set; }
-        public float batWAR { get; set; }
-        public float pitWAA { get; set; }
-        public float pitWAR { get; set; }
-        public float WAA { get; set; }
-        public float WAR { get; set; }
-
+        public string Name { get; set; } = null!;
+        public string BbrefId { get; set; } = null!;
+        public short YearId { get; set; }
+        public string TeamId { get; set; } = null!;
+        public byte StintId { get; set; }
+        public string LgId { get; set; } = null!;
+        public double? BatWaa { get; set; }
+        public double? BatWar { get; set; }
+        public double? PitWar { get; set; }
+        public double? PitWaa { get; set; }
+        public double? War1 { get; set; }
+        public double? Waa { get; set; }
     }
 }

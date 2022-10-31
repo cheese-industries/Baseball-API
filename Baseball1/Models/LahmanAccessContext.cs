@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Baseball1.Models
+namespace Baseball1
 {
     public partial class LahmanAccessContext : DbContext
     {
@@ -43,13 +43,14 @@ namespace Baseball1.Models
         public virtual DbSet<Team> Teams { get; set; } = null!;
         public virtual DbSet<TeamsFranchise> TeamsFranchises { get; set; } = null!;
         public virtual DbSet<TeamsHalf> TeamsHalves { get; set; } = null!;
+        public virtual DbSet<War> Wars { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=localhost;database=LahmanAccess;trusted_connection=true;", o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)) ;
+                optionsBuilder.UseSqlServer("server=localhost;database=LahmanAccess;trusted_connection=true;");
             }
         }
 
@@ -154,7 +155,6 @@ namespace Baseball1.Models
                 entity.Property(e => e.LgId)
                     .HasMaxLength(2)
                     .HasColumnName("lgID");
-
                 entity.HasOne(e => e.Person).WithMany(v => v.AppearanceSeasons);
             });
 
@@ -329,7 +329,6 @@ namespace Baseball1.Models
 
                 entity.Property(e => e._3b).HasColumnName("3B");
                 entity.HasOne(e => e.Person).WithMany(v => v.BattingSeasons);
-
             });
 
             modelBuilder.Entity<BattingPost>(entity =>
@@ -445,11 +444,6 @@ namespace Baseball1.Models
                 entity.Property(e => e.Po).HasColumnName("PO");
 
                 entity.Property(e => e.Sb).HasColumnName("SB");
-
-                entity.Property(e => e.SsmaTimeStamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken()
-                    .HasColumnName("SSMA_TimeStamp");
 
                 entity.Property(e => e.TeamId)
                     .HasMaxLength(3)
@@ -835,15 +829,13 @@ namespace Baseball1.Models
                     .HasColumnName("throws");
 
                 entity.Property(e => e.Weight).HasColumnName("weight");
-
                 entity.HasMany(v => v.BattingSeasons).WithOne(v => v.Person);
 
-                entity.HasMany(v => v.BattingPostSeasons).WithOne(v => v.Person);
+                //entity.HasMany(v => v.BattingPostSeasons).WithOne(v => v.Person);
 
                 entity.HasMany(v => v.PitchingSeasons).WithOne(v => v.Person);
 
                 entity.HasMany(v => v.AppearanceSeasons).WithOne(v => v.Person);
-
             });
 
             modelBuilder.Entity<Pitching>(entity =>
@@ -913,7 +905,6 @@ namespace Baseball1.Models
 
                 entity.Property(e => e.Wp).HasColumnName("WP");
                 entity.HasOne(e => e.Person).WithMany(v => v.PitchingSeasons);
-
             });
 
             modelBuilder.Entity<PitchingPost>(entity =>
@@ -1192,9 +1183,7 @@ namespace Baseball1.Models
                 entity.Property(e => e._2b).HasColumnName("2B");
 
                 entity.Property(e => e._3b).HasColumnName("3B");
-
                 entity.HasMany(e => e.BattingSeasons).WithOne(e => e.Team);
-
             });
 
             modelBuilder.Entity<TeamsFranchise>(entity =>
@@ -1245,6 +1234,45 @@ namespace Baseball1.Models
                     .HasColumnName("divID");
 
                 entity.Property(e => e.DivWin).HasMaxLength(1);
+            });
+
+            modelBuilder.Entity<War>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("war");
+
+                entity.Property(e => e.BatWaa).HasColumnName("batWAA");
+
+                entity.Property(e => e.BatWar).HasColumnName("batWAR");
+
+                entity.Property(e => e.BbrefId)
+                    .HasMaxLength(50)
+                    .HasColumnName("bbrefId");
+
+                entity.Property(e => e.LgId)
+                    .HasMaxLength(50)
+                    .HasColumnName("lgId");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.PitWaa).HasColumnName("pitWAA");
+
+                entity.Property(e => e.PitWar).HasColumnName("pitWAR");
+
+                entity.Property(e => e.StintId).HasColumnName("stintId");
+
+                entity.Property(e => e.TeamId)
+                    .HasMaxLength(50)
+                    .HasColumnName("teamId");
+
+                entity.Property(e => e.Waa).HasColumnName("WAA");
+
+                entity.Property(e => e.War1).HasColumnName("WAR");
+
+                entity.Property(e => e.YearId).HasColumnName("yearId");
             });
 
             OnModelCreatingPartial(modelBuilder);

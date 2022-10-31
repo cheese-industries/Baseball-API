@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Baseball1.Models
+namespace Baseball1
 {
     public partial class AwardsSharePlayer
     {

@@ -68,6 +68,6 @@ namespace Baseball1.Models
         public ICollection<Pitching> PitchingSeasons { get; set; }
         public ICollection<Fielding> FieldingSeasons { get; set; }
         public ICollection<Appearance> AppearanceSeasons { get; set; }
-        //public ICollection<Team> TeamSeasons { get; set; }
+      
     }
 }

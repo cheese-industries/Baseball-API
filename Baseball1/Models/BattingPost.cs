@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Baseball1.Models
+namespace Baseball1
 {
     public partial class BattingPost
     {
@@ -27,7 +27,5 @@ namespace Baseball1.Models
         public short? Sh { get; set; }
         public short? Sf { get; set; }
         public short? Gidp { get; set; }
-
-        public Person Person { get; set; }
     }
 }

@@ -6,7 +6,7 @@
         public string Pos { get; set; } = null!;
         public short? G { get; set; }
         public short? Gs { get; set; }
-        public short? InnOuts { get; set; }
+        public int? InnOuts { get; set; }
         public short? Po { get; set; }
         public short? A { get; set; }
         public short? E { get; set; }
